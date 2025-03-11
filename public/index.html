@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redis Web App</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Redis Web Application</h1>
+            <p>A demonstration of Redis-based rate limiting and click counting</p>
+        </header>
+
+        <main>
+            <section class="card">
+                <h2>Click Counter Demo</h2>
+                <p>Click the button below to increment a counter stored in Redis.</p>
+                <div class="button-container">
+                    <button id="clickButton" class="btn btn-primary">Click Me!</button>
+                    <span id="clickFeedback" class="feedback"></span>
+                </div>
+                <div class="counter-display">
+                    <p>Button has been clicked <span id="clickCount">--</span> times.</p>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Rate Limiting Demo</h2>
+                <p>This demonstrates Redis-based rate limiting. Try clicking rapidly to see the rate limit in action.
+                </p>
+                <div class="button-container">
+                    <button id="rateLimitButton" class="btn btn-secondary">Test Rate Limit</button>
+                    <span id="rateLimitFeedback" class="feedback"></span>
+                </div>
+                <div class="rate-limit-info">
+                    <p>Requests remaining: <span id="requestsRemaining">--</span></p>
+                    <div id="rateLimitVisual" class="rate-limit-visual"></div>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Statistics</h2>
+                <div class="stats-container">
+                    <div class="stat-box">
+                        <h3>Total Clicks</h3>
+                        <p id="totalClicks">--</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>Home Route Clicks</h3>
+                        <p id="homeClicks">--</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>Click-Me Route Clicks</h3>
+                        <p id="clickMeClicks">--</p>
+                    </div>
+                </div>
+                <button id="refreshStats" class="btn btn-outline">Refresh Stats</button>
+            </section>
+        </main>
+
+        <footer>
+            <p>Powered by Node.js, Express, TypeScript, and Redis</p>
+        </footer>
+    </div>
+
+    <script src="/js/index.js" type="module"></script>
+</body>
+
+</html>
