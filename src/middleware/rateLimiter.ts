@@ -13,13 +13,19 @@ const rateLimiter: MiddlewareFunction = async (
     next: NextFunction
 ) => {
     try {
+        // Check if Redis is connected before proceeding
+        if (!redisClient.isOpen) {
+            console.warn('Redis connection not available for rate limiting');
+            return next(); // Continue without rate limiting
+        }
+
         // get client IP address
         const ip = req.ip || req.socket.remoteAddress || 'unknown';
 
-        // create a REdis key to this IP
+        // create a Redis key to this IP
         const key = `rate_limit:${ip}`;
 
-        // get current request count from REdis for this IP
+        // get current request count from Redis for this IP
         const requestCount = await redisClient.get(key);
 
         // get rate limit settings from env variables
@@ -41,7 +47,6 @@ const rateLimiter: MiddlewareFunction = async (
         const count = parseInt(requestCount, 10);
 
         if (count < maxRequests) {
-
             await redisClient.incr(key);
             res.setHeader('X-RateLimit-Remaining', (maxRequests - count - 1).toString());
             return next();
@@ -55,7 +60,7 @@ const rateLimiter: MiddlewareFunction = async (
         });
     } catch (error) {
         console.error('Rate Limiter Error: ', error);
-        next();
+        next(); // Continue without rate limiting on error
     }
 };
 

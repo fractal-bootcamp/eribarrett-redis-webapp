@@ -9,6 +9,12 @@ import redisClient from '../config/redis';
 const clickCounter: ClickCounterMiddleware = (routeName: string) => {
     return async (req, res, next) => {
         try {
+            // Check if Redis is connected before proceeding
+            if (!redisClient.isOpen) {
+                console.warn('Redis connection not available for click counting');
+                return next(); // Continue without counting
+            }
+
             // create a Redis key for this route
             const key = `clicks:${routeName || req.path}`;
 
@@ -38,6 +44,12 @@ const clickCounter: ClickCounterMiddleware = (routeName: string) => {
 
 const getClickCount = async (routeName: string): Promise<number> => {
     try {
+        // Check if Redis is connected before proceeding
+        if (!redisClient.isOpen) {
+            console.warn('Redis connection not available for getting click count');
+            return 0;
+        }
+
         const key = `clicks:${routeName}`;
         const count = await redisClient.get(key);
         return count ? parseInt(count, 10) : 0;
