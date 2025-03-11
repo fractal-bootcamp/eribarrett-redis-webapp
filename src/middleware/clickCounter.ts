@@ -32,4 +32,19 @@ const clickCounter: ClickCounterMiddleware = (routeName: string) => {
     };
 };
 
-export default clickCounter;
+/**
+ * get click count for specific route
+ */
+
+const getClickCount = async (routeName: string): Promise<number> => {
+    try {
+        const key = `clicks:${routeName}`;
+        const count = await redisClient.get(key);
+        return count ? parseInt(count, 10) : 0;
+    } catch (error) {
+        console.error('Get click count error:', error);
+        return 0;
+    }
+};
+
+export { clickCounter, getClickCount };
